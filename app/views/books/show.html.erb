@@ -7,7 +7,7 @@
 		<%= render 'users/profile', user: @user %>
 
 		<h2>New book</h2>
-		<%= render 'books/newform', book: @book %>
+		<%= render 'books/newform', book: Book.new %>
 
 	</div>
 
@@ -24,12 +24,44 @@
 					</td>
 					<td><%= link_to @book.title, @book %></td>
 					<td><%= @book.body %></td>
+
+					<!-- いいねとコメント -->
+					<td>
+					<% if @book.favorited_by?(current_user) %>
+						<li>
+						    <%= link_to book_favorites_path(@book), method: :delete do %>
+						    <i class="fa fa-heart" aria-hidden="true" style="color: red;"></i>
+						    <%= @book.favorites.count %>
+						    <% end %>
+						</li>
+						<% else %>
+						<li>
+						    <%= link_to book_favorites_path(@book), method: :post do %>
+						    <i class="fa fa-heart" aria-hidden="true" style="color: black;"></i>
+						    <%= @book.favorites.count %>
+						    <% end %>
+						</li>
+					<% end %>
+					</td>
+					<td>コメント数:<%= @book.post_comments.count %></td>
+
 					<% if @book.user == current_user %>
 					<td><%= link_to "Edit",edit_book_path(@book), class: "btn-sm btn-success edit_book_#{@book.id}" %></td>
 					<td><%= link_to "Destroy",@book, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{@book.id}" %></td>
 					<% end %>
 				</tr>
+
 			</table>
+							<!-- <form class="mt-20"> -->
+				<%= form_for [@book, @post_comment] do |f| %>
+
+				        <div class="col-sm-9">
+				            <%= f.text_area :comment, rows:'5', class: "form-control",placeholder: "コメントをここに" %>
+				        </div>
+
+				    <%= f.submit "送信" %>
+				<% end %>
+				<!-- </form> -->
 
 	</div>
 </div>
