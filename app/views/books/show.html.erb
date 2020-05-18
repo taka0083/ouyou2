@@ -15,7 +15,7 @@
 		<h2>Book detail</h2>
 
 		<table class="table">
-				<tr>
+			<tr>
 					<td>
 						<%= link_to (@book.user) do %>
 						<%= attachment_image_tag(@user, :profile_image, :fill, 100, 100, fallback: "no-image-mini.jpg") %><br>
@@ -49,9 +49,25 @@
 					<td><%= link_to "Edit",edit_book_path(@book), class: "btn-sm btn-success edit_book_#{@book.id}" %></td>
 					<td><%= link_to "Destroy",@book, method: :delete, data: {confirm: "本当に削除してもよろしいですか？"}, class: "btn-sm btn-danger destroy_book_#{@book.id}" %></td>
 					<% end %>
-				</tr>
+			</tr>
+		</table>
+				<!-- コメント一覧 -->
+		<table class="table">
+				<tr>
+          		<% @post_comments.each do |post_comment| %>
+          	 		<td> <%= link_to user_path(post_comment.user), class: "user_#{post_comment.user.id}" do %>
+              			<%= post_comment.user.name %>
+           				 <% end %>
+          			</td>
+          			<td><%= post_comment.comment %></td>
+          			<% if current_user == post_comment.user %>
+            		<td><%= link_to 'Destroy', book_post_comments_path(post_comment.id), class: 'btn-sm btn-danger', method: :delete %></td>
+          			<% end %>
+		        <% end %>
+		    	</tr>
 
-			</table>
+
+		</table>
 							<!-- <form class="mt-20"> -->
 				<%= form_for [@book, @post_comment] do |f| %>
 

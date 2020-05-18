@@ -7,6 +7,11 @@ class PostCommentsController < ApplicationController
 	    comment.save
 	    redirect_to book_path(book)
 	end
+	def destroy
+        post_comment = PostComment.find(params[:book_id])
+        post_comment.destroy
+        redirect_to books_path
+    end
 
 	    private
 	def post_comment_params
